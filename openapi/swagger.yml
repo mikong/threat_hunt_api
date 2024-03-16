@@ -7,6 +7,16 @@ info:
 servers:
   - url: "/api"
 
+components:
+  schemas:
+    Tenant:
+      type: "object"
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
 paths:
   /tenants:
     get:
@@ -15,3 +25,17 @@ paths:
       responses:
         "200":
           description: A JSON array of tenant objects
+    post:
+      summary: Create a tenant.
+      operationId: tenants.create
+      requestBody:
+        description: Tenant to create
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: tenant
+              $ref: "#/components/schemas/Tenant"
+      responses:
+        "201":
+          description: Created tenant
