@@ -1,5 +1,5 @@
 from uuid import uuid4
-from flask import abort
+from flask import abort, make_response
 
 TENANT_NAMES = [
     "Cisco Systems, Inc.",
@@ -31,3 +31,28 @@ def create(tenant):
         "name": name
     }
     return TENANTS[id], 201
+
+def show(id):
+    if id not in TENANTS:
+        abort(404, "Tenant not found")
+    
+    return TENANTS[id]
+
+def update(id, tenant):
+    if id not in TENANTS:
+        abort(404, "Tenant not found")
+    
+    name = tenant.get("name")
+
+    if name is None or name == "":
+        abort(406, "Name is missing")
+
+    TENANTS[id]["name"] = name
+    return TENANTS[id]
+
+def delete(id):
+    if id not in TENANTS:
+        abort(404, "Tenant not found")
+    
+    del TENANTS[id]
+    return make_response("Tenant successfully deleted", 200)

@@ -16,6 +16,14 @@ components:
       properties:
         name:
           type: string
+  parameters:
+    id:
+      name: id
+      description: ID of tenant to retrieve
+      in: path
+      required: True
+      schema:
+        type: string
 
 paths:
   /tenants:
@@ -26,7 +34,7 @@ paths:
         "200":
           description: A JSON array of tenant objects
     post:
-      summary: Create a tenant.
+      summary: Creates a tenant.
       operationId: tenants.create
       requestBody:
         description: Tenant to create
@@ -39,3 +47,40 @@ paths:
       responses:
         "201":
           description: Created tenant
+  /tenants/{id}:
+    get:
+      summary: Returns specified tenant.
+      operationId: tenants.show
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: "Returned tenant"
+    put:
+      summary: Updates a tenant.
+      operationId: tenants.update
+      parameters:
+        - $ref: "#/components/parameters/id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: tenant
+              $ref: "#/components/schemas/Tenant"
+      responses:
+        "200":
+          description: Updated tenant
+        "404":
+          description: Tenant not found
+        "406":
+          description: Missing field
+    delete:
+      summary: Deletes a tenant.
+      operationId: tenants.delete
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: Deleted tenant
+        "404":
+          description: Tenant not found
